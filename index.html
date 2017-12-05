@@ -2,194 +2,28 @@
 
 <!DOCTYPE html>
 <html>
-<meta charset = "utf-8" />
-<title>Blockchain Radio</title>
+	<head>
 
-<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta charset = "utf-8" />
+		<title>Blockchain Radio</title>
 
-<style>
-	/*https://stackoverflow.com/questions/16615403/css-how-to-draw-circle-with-text-in-middle, https://stackoverflow.com/questions/9358882/how-to-make-a-circle-around-content-using-css/9359039#9359039*/ 
-	.circle {
-		display: table-cell;
-		vertical-align: middle;
-		width: 300px;
-		height: 300px;
-		border-radius: 50%;
-		font-size: 50px;
-		font-family: 'Roboto', sans-serif;
-		color: #fff;
-		line-height: 300px;
-		text-align: center;
-		background: #98ff98;
-		-webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
-		-moz-animation: fadein 1s; /* Firefox < 16 */
-		-ms-animation: fadein 1s; /* Internet Explorer */
-		-o-animation: fadein 1s; /* Opera < 12.1 */
-		animation: fadein 1s;
+		<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-		/*https://stackoverflow.com/questions/356809/best-way-to-center-a-div-on-a-page-vertically-and-horizontally*/
+		<style src="https://cdn.rawgit.com/jacobajit/blockchainRadio/master/styles.css"></style>
 
-		position: absolute;
-		top:0;
-		bottom: 0;
-		left: 0;
-		right: 0;
+		<script src="https://cdn.rawgit.com/jacobajit/blockchainRadio/master/audiosynth.js"></script>
+		<script src="https://cdn.rawgit.com/jacobajit/blockchainRadio/master/scripts.js"></script>
 
-		margin: auto;
+	</head>
 
-	}
-
-	
-
-
-	/*https://stackoverflow.com/questions/11679567/using-css-for-fade-in-effect-on-page-load*/
-
-
-	@keyframes fadein {
-		from { opacity: 0; }
-		to   { opacity: 1; }
-	}
-
-	/* Firefox < 16 */
-	@-moz-keyframes fadein {
-		from { opacity: 0; }
-		to   { opacity: 1; }
-	}
-
-	/* Safari, Chrome and Opera > 12.1 */
-	@-webkit-keyframes fadein {
-		from { opacity: 0; }
-		to   { opacity: 1; }
-	}
-
-	/* Internet Explorer */
-	@-ms-keyframes fadein {
-		from { opacity: 0; }
-		to   { opacity: 1; }
-	}
-
-	/* Opera < 12.1 */
-	@-o-keyframes fadein {
-		from { opacity: 0; }
-		to   { opacity: 1; }
-	}
-
-
-</style>
-<script src="https://cdn.rawgit.com/jacobajit/blockchainRadio/master/audiosynth.js"></script>
-<script language = "javascript" type = "text/javascript">
-
-		var acoustic = Synth.createInstrument('acoustic');
-
-
-		// https://stackoverflow.com/questions/39200994/play-specific-frequency-with-javascript, https://jsfiddle.net/njb91z84/
-
-		var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-		function playNote(frequency, duration) {
-		// create Oscillator node
-		var oscillator = audioCtx.createOscillator();
-
-		oscillator.type = 'square';
-		oscillator.frequency.value = frequency; // value in hertz
-		oscillator.connect(audioCtx.destination);
-		oscillator.start();
-
-		setTimeout(
-			function(){
-				oscillator.stop();
-			}, duration);
-	}
-
-		//https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_client_applications
-
-		blockSocket = new WebSocket("wss://ws.blockchain.info/inv");
-
-		blockSocket.onopen = function(event) {
-			blockSocket.send('{"op":"unconfirmed_sub"}')
-			blockSocket.send('{"op":"blocks_sub"}')
-		};
-
-		//http://soundbible.com/1477-Zen-Temple-Bell.html
-		var gong = new Audio('https://cdn.rawgit.com/jacobajit/blockchainRadio/master/gong.mp3');
-
-		blockSocket.onmessage = function (event) {
-			var data = JSON.parse(event.data);
-			console.log(data);
-			if(data.op == "utx")
-			{
-				size = parseInt(data.x.size);
-				console.log(size);
-
-				outputs = data.x.inputs
-
-				var total = 0;
-				for(i = 0; i < outputs.length; i++)
-				{
-					total += outputs[i].prev_out.value;
-				}
-
-				document.getElementById("circle").innerHTML = '฿ ' + total;
-				//https://stackoverflow.com/questions/5092808/how-do-i-randomly-generate-html-hex-color-codes-using-javascript
-				document.getElementById("circle").style.background = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
-
-				console.log(total);
-
-
-				total = total / 10000
-				if(total > 0 && total < 10 ** 0)
-				{
-					note = 'A'
-				}
-
-				else if(total > 10 ** 0 && total < 10 ** 1)
-				{
-					note = 'B'
-				}
-
-				else if(total > 10 ** 1 && total < 10 ** 2)
-				{
-					note = 'C'
-				}
-
-				else if(total > 10 ** 2 && total < 10 ** 3)
-				{
-					note = 'D'
-				}
-
-				else if(total > 10 ** 3 && total < 10 ** 4)
-				{
-					note = 'E'
-				}
-
-				else if(total > 10 ** 4 && total < 10 ** 5)
-				{
-					note = 'F'
-				}
-
-				else
-				{
-					note = 'G'
-				}
-
-				console.log(note)
-				acoustic.play(note, 4, 2)
-				//playNote(total/1000000, 1000*256/(4*100));
-			}
-			else if(data.op == "block")
-			{
-				gong.play();
-			}
-		}
-
-	</script>
 	<body>
-		<a style="top: 0px; float:right; font-family: 'Roboto', sans-serif;" href="about.html"> About </a>
-		<h1 style="font-family: 'Roboto', sans-serif;">Blockchain Radio</h1>
+		<a id="aboutlink" href="about.html">About</a>
+		<h1>Blockchain Radio</h1>
 		<div class="circle" id="circle">
 		</div>
 
 	</body>
 
-	</html>
+</html>
