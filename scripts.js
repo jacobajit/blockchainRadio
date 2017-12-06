@@ -1,4 +1,8 @@
 
+// https://developer.mozilla.org/en-US/docs/Web/API/AudioContext
+var AudioContext = window.AudioContext || window.webkitAudioContext;
+var myContext = new AudioContext();
+
 // Unlock audio context - adapted from https://paulbakaus.com/tutorials/html5/web-audio-on-ios/
 var isUnlocked = false;
 function unlock() {
@@ -11,7 +15,7 @@ function unlock() {
 	var source = myContext.createBufferSource();
 	source.buffer = buffer;
 	source.connect(myContext.destination);
-	source.noteOn(0);
+	source.start(0);
 
 	// by checking the play state after some time, we know if we're really unlocked
 	setTimeout(function() {
