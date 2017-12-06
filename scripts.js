@@ -1,33 +1,38 @@
-var acoustic = Synth.createInstrument('acoustic');
 
+// Unlock audio context - adapted from https://paulbakaus.com/tutorials/html5/web-audio-on-ios/
+var isUnlocked = false;
+function unlock() {
+			
+	if(this.unlocked)
+		return;
 
-// https://stackoverflow.com/questions/39200994/play-specific-frequency-with-javascript, https://jsfiddle.net/njb91z84/
+	// create empty buffer and play it
+	var buffer = myContext.createBuffer(1, 1, 22050);
+	var source = myContext.createBufferSource();
+	source.buffer = buffer;
+	source.connect(myContext.destination);
+	source.noteOn(0);
 
-var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+	// by checking the play state after some time, we know if we're really unlocked
+	setTimeout(function() {
+		if((source.playbackState === source.PLAYING_STATE || source.playbackState === source.FINISHED_STATE)) {
+			isUnlocked = true;
+		}
+	}, 0);
 
-function playNote(frequency, duration) {
-// create Oscillator node
-var oscillator = audioCtx.createOscillator();
-
-oscillator.type = 'square';
-oscillator.frequency.value = frequency; // value in hertz
-oscillator.connect(audioCtx.destination);
-oscillator.start();
-
-setTimeout(
-	function(){
-		oscillator.stop();
-	}, duration);
 }
 
-//https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_client_applications
 
 blockSocket = new WebSocket("wss://ws.blockchain.info/inv");
+
 
 blockSocket.onopen = function(event) {
 	blockSocket.send('{"op":"unconfirmed_sub"}')
 	blockSocket.send('{"op":"blocks_sub"}')
 };
+
+// using AudioSynth - https://github.com/keithwhor/audiosynth
+var acoustic = Synth.createInstrument('acoustic');
 
 //http://soundbible.com/1477-Zen-Temple-Bell.html
 var gong = new Audio('https://cdn.rawgit.com/jacobajit/blockchainRadio/master/gong.mp3');
@@ -94,6 +99,7 @@ blockSocket.onmessage = function (event) {
 		}
 
 		console.log(note)
+		unlock();
 		acoustic.play(note, 4, 2)
 		//playNote(total/1000000, 1000*256/(4*100));
 	}
