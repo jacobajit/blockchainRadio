@@ -1,4 +1,11 @@
 
+//create a synth and connect it to the master output (your speakers)
+var synth = new Tone.Synth().toMaster();
+
+//play a middle 'C' for the duration of an 8th note
+synth.triggerAttackRelease("C4", "8n");
+
+
 // https://developer.mozilla.org/en-US/docs/Web/API/AudioContext
 var AudioContext = window.AudioContext || window.webkitAudioContext;
 var myContext = new AudioContext();
@@ -104,7 +111,7 @@ blockSocket.onmessage = function (event) {
 
 		console.log(note)
 		unlock();
-		acoustic.play(note, 4, 2)
+		// acoustic.play(note, 4, 2)
 		//playNote(total/1000000, 1000*256/(4*100));
 	}
 	else if(data.op == "block")
