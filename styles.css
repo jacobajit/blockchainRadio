@@ -1,4 +1,5 @@
-#aboutlink
+
+a.top-right-link
 {
 	top: 0px; float:right;
 }
@@ -7,8 +8,9 @@ body
 {
 	font-family: 'Roboto', sans-serif;
 }
-/*https://stackoverflow.com/questions/16615403/css-how-to-draw-circle-with-text-in-middle, https://stackoverflow.com/questions/9358882/how-to-make-a-circle-around-content-using-css/9359039#9359039*/ 
-.circle 
+
+/* Circle div -adapted from https://stackoverflow.com/questions/16615403/css-how-to-draw-circle-with-text-in-middle*/ 
+#circle 
 {
 	display: table-cell;
 	vertical-align: middle;
@@ -22,14 +24,14 @@ body
 	text-align: center;
 	background: #98ff98;
 
-	/*https://stackoverflow.com/questions/11679567/using-css-for-fade-in-effect-on-page-load*/
+	/* Fade in cirlce - https://stackoverflow.com/questions/11679567/using-css-for-fade-in-effect-on-page-load*/
 	-webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
 	-moz-animation: fadein 1s; /* Firefox < 16 */
 	-ms-animation: fadein 1s; /* Internet Explorer */
 	-o-animation: fadein 1s; /* Opera < 12.1 */
 	animation: fadein 1s;
 
-	/*https://stackoverflow.com/questions/356809/best-way-to-center-a-div-on-a-page-vertically-and-horizontally*/
+	/* Center div - adapted from https://stackoverflow.com/questions/356809/best-way-to-center-a-div-on-a-page-vertically-and-horizontally*/
 	position: absolute;
 	top:0;
 	bottom: 0;
@@ -40,8 +42,7 @@ body
 
 }
 
-
-/*https://stackoverflow.com/questions/11679567/using-css-for-fade-in-effect-on-page-load*/
+/* Fade in circle definition of animation - https://stackoverflow.com/questions/11679567/using-css-for-fade-in-effect-on-page-load*/
 @keyframes fadein 
 {
 	from { opacity: 0; }

@@ -1,8 +1,9 @@
 
-
+// Using https://blockchain.info/api/api_websocket API
+// Open websocket
 blockSocket = new WebSocket("wss://ws.blockchain.info/inv");
 
-
+// Subscribe to unconfirmed transaction and block confirmation events
 blockSocket.onopen = function(event) {
 	blockSocket.send('{"op":"unconfirmed_sub"}')
 	blockSocket.send('{"op":"blocks_sub"}')
@@ -12,39 +13,48 @@ blockSocket.onopen = function(event) {
 var acoustic = Synth.createInstrument('acoustic');
 
 // Using/from ToneJS - https://github.com/Tonejs/Tone.js/
-//create a synth and connect it to the master output (your speakers)
-var synth = new Tone.Synth().toMaster();
+// create a synth and connect it to the master output (your speakers)
+var synth = new Tone.FMSynth().toMaster();
 
-
-//http://soundbible.com/1477-Zen-Temple-Bell.html
+// http://soundbible.com/1477-Zen-Temple-Bell.html
 var gong = new Audio('https://cdn.rawgit.com/jacobajit/blockchainRadio/master/gong.mp3');
 
+
+
 blockSocket.onmessage = function (event) {
+
 	var data = JSON.parse(event.data);
-	console.log(data);
+
+	// Unconfirmed transaction
 	if(data.op == "utx")
 	{
-		size = parseInt(data.x.size);
-		console.log(size);
 
-		outputs = data.x.inputs
+		// Inputs of transaction
+		inputs = data.x.inputs
 
+		// Sum transaction inputs to get total value approximation
 		var total = 0;
-		for(i = 0; i < outputs.length; i++)
+		for(i = 0; i < inputs.length; i++)
 		{
-			total += outputs[i].prev_out.value;
+			total += inputs[i].prev_out.value;
 		}
 
-		document.getElementById("circle").innerHTML = '฿ ' + total;
+		// Convert bits sub-unit to Bitcoin
+		var totalBTC = total * 0.000001
 
-		//https://stackoverflow.com/questions/5092808/how-do-i-randomly-generate-html-hex-color-codes-using-javascript
+		// Put total value in circle
+		document.getElementById("circle").innerHTML = '฿' + totalBTC;
+
+		// Change circle color to a random one
+		// https://stackoverflow.com/questions/5092808/how-do-i-randomly-generate-html-hex-color-codes-using-javascript
 		document.getElementById("circle").style.background = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
 
-		console.log(total);
-
-
+		// Scale total logarithmically for even distribution of notes
 		noteVal = Math.log10(total)
 
+
+		// Sequence of if statements to pick notes- values decided from trial and error
+		// Ugly but efficient - https://stackoverflow.com/questions/6665997/switch-statement-for-greater-than-less-than
 		if(total > 0 && noteVal < 4)
 		{
 			note = 'A'
@@ -80,11 +90,12 @@ blockSocket.onmessage = function (event) {
 			note = 'G'
 		}
 
-		console.log(note)
-		// acoustic.play(note, 4, 2)
+		// Play that note in 4th octave for duration of fourth notes using ToneJS
 		synth.triggerAttackRelease(note + "4", "4n");
-		//playNote(total/1000000, 1000*256/(4*100));
+
 	}
+
+	// New block confirmed
 	else if(data.op == "block")
 	{
 		gong.play();
