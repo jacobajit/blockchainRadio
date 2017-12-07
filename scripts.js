@@ -14,7 +14,7 @@ var acoustic = Synth.createInstrument('acoustic');
 
 // Using/from ToneJS - https://github.com/Tonejs/Tone.js/
 // create a synth and connect it to the master output (your speakers)
-var synth = new Tone.FMSynth().toMaster();
+var synth = new Tone.Synth().toMaster();
 
 // http://soundbible.com/1477-Zen-Temple-Bell.html
 var gong = new Audio('https://cdn.rawgit.com/jacobajit/blockchainRadio/master/gong.mp3');
