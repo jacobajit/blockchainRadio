@@ -24,7 +24,7 @@ body
 	text-align: center;
 	background: #98ff98;
 
-	/* Fade in cirlce - https://stackoverflow.com/questions/11679567/using-css-for-fade-in-effect-on-page-load*/
+	/* Fade in circle - https://stackoverflow.com/questions/11679567/using-css-for-fade-in-effect-on-page-load*/
 	-webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
 	-moz-animation: fadein 1s; /* Firefox < 16 */
 	-ms-animation: fadein 1s; /* Internet Explorer */
@@ -42,7 +42,7 @@ body
 
 }
 
-/* Fade in circle definition of animation - https://stackoverflow.com/questions/11679567/using-css-for-fade-in-effect-on-page-load*/
+/* Fade in circle, definition of animation - https://stackoverflow.com/questions/11679567/using-css-for-fade-in-effect-on-page-load*/
 @keyframes fadein 
 {
 	from { opacity: 0; }

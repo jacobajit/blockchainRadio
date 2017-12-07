@@ -9,9 +9,6 @@ blockSocket.onopen = function(event) {
 	blockSocket.send('{"op":"blocks_sub"}')
 };
 
-// using AudioSynth - https://github.com/keithwhor/audiosynth
-var acoustic = Synth.createInstrument('acoustic');
-
 // Using/from ToneJS - https://github.com/Tonejs/Tone.js/
 // create a synth and connect it to the master output (your speakers)
 var synth = new Tone.Synth().toMaster();
