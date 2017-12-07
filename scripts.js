@@ -1,4 +1,3 @@
-
 // Using https://blockchain.info/api/api_websocket API
 // Open websocket
 blockSocket = new WebSocket("wss://ws.blockchain.info/inv");
@@ -16,8 +15,7 @@ var synth = new Tone.Synth().toMaster();
 // http://soundbible.com/1477-Zen-Temple-Bell.html
 var gong = new Audio('https://cdn.rawgit.com/jacobajit/blockchainRadio/master/gong.mp3');
 
-
-
+// Websocket receives a new message - event handler function
 blockSocket.onmessage = function (event) {
 
 	var data = JSON.parse(event.data);
@@ -95,6 +93,7 @@ blockSocket.onmessage = function (event) {
 	// New block confirmed
 	else if(data.op == "block")
 	{
+		// Play using Web Audio API
 		gong.play();
 	}
 }
